@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
       .pipe(
         tap(user => {
           this.store.dispatch(fromAuthActions.login({ user }));
-          this.router.navigateByUrl('/home');
+          this.router.navigateByUrl('/courses');
         })
       )
       .subscribe(noop, err => alert('HTTP Error: ' + err[1]));

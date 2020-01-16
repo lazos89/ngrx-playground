@@ -25,22 +25,21 @@ import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AuthModule } from './auth/auth.module';
-import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth/auth.guard';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './app.effects';
+import { EntityDataModule } from '@ngrx/data';
+import { entityConfig } from './entity-metadata';
+import { StoreRouterConnectingModule, RouterState } from '@ngrx/router-store';
 
 const routes: Routes = [
-  // {
-  //   path: 'courses',
-  //   loadChildren: () =>
-  //     import('./courses/courses.module').then(m => m.CoursesModule)
-  // },
   {
-    path: 'home',
-    component: HomeComponent,
+    path: 'courses',
+    loadChildren: () =>
+      import('./courses/courses.module').then(m => m.CoursesModule),
     canActivate: [AuthGuard]
   },
+
   {
     path: '**',
     redirectTo: '/'
@@ -48,7 +47,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -65,14 +64,21 @@ const routes: Routes = [
       metaReducers,
       runtimeChecks: {
         strictStateImmutability: true,
-        strictActionImmutability: true
+        strictActionImmutability: true,
+        strictStateSerializability: true,
+        strictActionSerializability: true
       }
     }),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
     }),
-    EffectsModule.forRoot([AppEffects])
+    EffectsModule.forRoot([AppEffects]),
+    EntityDataModule.forRoot(entityConfig),
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router',
+      routerState: RouterState.Minimal
+    })
   ],
   bootstrap: [AppComponent]
 })

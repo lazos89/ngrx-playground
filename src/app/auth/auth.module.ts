@@ -12,6 +12,8 @@ import { StoreModule } from '@ngrx/store';
 import { authReducer } from './reducers';
 import { reducers, metaReducers } from '../reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './auth.effects';
 // import { environment } from '../environments/environment';
 // import { EffectsModule } from '@ngrx/effects';
 
@@ -23,7 +25,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     MatInputModule,
     MatButtonModule,
     StoreModule.forFeature('auth', authReducer),
-    RouterModule.forChild([{ path: '', component: LoginComponent }])
+    RouterModule.forChild([{ path: '', component: LoginComponent }]),
+    EffectsModule.forFeature([AuthEffects])
     // StoreModule.forRoot(reducers, {
     //   metaReducers,
     //   runtimeChecks: {
