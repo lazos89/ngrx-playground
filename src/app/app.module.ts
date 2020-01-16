@@ -74,7 +74,7 @@ const routes: Routes = [
       logOnly: environment.production
     }),
     EffectsModule.forRoot([AppEffects]),
-    EntityDataModule.forRoot(entityConfig),
+    // EntityDataModule.forRoot(entityConfig),
     StoreRouterConnectingModule.forRoot({
       stateKey: 'router',
       routerState: RouterState.Minimal
