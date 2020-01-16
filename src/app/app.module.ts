@@ -12,7 +12,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { HttpClientModule } from '@angular/common/http';
 
 import { RouterModule, Routes } from '@angular/router';
-import { AuthModule } from './auth/auth.module';
+
 // import { StoreModule } from '@ngrx/store';
 // import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
@@ -24,6 +24,11 @@ import { MatProgressSpinnerModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { AuthModule } from './auth/auth.module';
+import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './auth/auth.guard';
+import { EffectsModule } from '@ngrx/effects';
+import { AppEffects } from './app.effects';
 
 const routes: Routes = [
   // {
@@ -32,13 +37,18 @@ const routes: Routes = [
   //     import('./courses/courses.module').then(m => m.CoursesModule)
   // },
   {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     redirectTo: '/'
   }
 ];
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, HomeComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -58,7 +68,11 @@ const routes: Routes = [
         strictActionImmutability: true
       }
     }),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production
+    }),
+    EffectsModule.forRoot([AppEffects])
   ],
   bootstrap: [AppComponent]
 })

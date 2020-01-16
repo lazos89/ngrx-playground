@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵConsole } from '@angular/core';
 // import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -9,6 +9,11 @@ import {
   NavigationStart,
   Router
 } from '@angular/router';
+import { Store, select } from '@ngrx/store';
+import { AuthState } from './auth/reducers/index';
+import { AppState } from './reducers/index';
+import { selectLoggedIn } from './auth/auth.selectors';
+import * as fromAuthActions from './auth/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -18,9 +23,13 @@ import {
 export class AppComponent implements OnInit {
   loading = true;
 
-  constructor(private router: Router) {}
+  isLoggedIn$: Observable<boolean>;
+  constructor(private router: Router, private store: Store<AppState>) {}
 
   ngOnInit() {
+    // this.store.subscribe(state => console.log('store value', state));
+    this.isLoggedIn$ = this.store.pipe(select(selectLoggedIn));
+
     this.router.events.subscribe(event => {
       switch (true) {
         case event instanceof NavigationStart: {
@@ -41,5 +50,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  logout() {}
+  logout() {
+    this.store.dispatch(fromAuthActions.logout());
+  }
 }

@@ -8,6 +8,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 // import { StoreModule } from '@ngrx/store';
 import { AuthService } from './auth.service';
+import { StoreModule } from '@ngrx/store';
+import { authReducer } from './reducers';
+import { reducers, metaReducers } from '../reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+// import { environment } from '../environments/environment';
 // import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
@@ -17,7 +22,16 @@ import { AuthService } from './auth.service';
     MatCardModule,
     MatInputModule,
     MatButtonModule,
+    StoreModule.forFeature('auth', authReducer),
     RouterModule.forChild([{ path: '', component: LoginComponent }])
+    // StoreModule.forRoot(reducers, {
+    //   metaReducers,
+    //   runtimeChecks: {
+    //     strictStateImmutability: true,
+    //     strictActionImmutability: true
+    //   }
+    // }),
+    // !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   declarations: [LoginComponent],
   exports: [LoginComponent]
